@@ -1,7 +1,9 @@
 var http = require('http');
+var fs = require('fs');
 var message = "yaehhhhh!!";
 var messageNode = "this is the node page";
 var messageGirls = "this is the girls page";
+
 
 function handler(request, response){
 
@@ -11,21 +13,33 @@ function handler(request, response){
   var endpoint = request.url;
     console.log(endpoint);
 
-  response.writeHead(200, {"Content-Type": "text/html"});
- 
+  if (request.url === "/") {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    fs.readFile(__dirname + '/public/index.html', function(error, file) {
+      if (error) {
+        console.log(error);
+        return;
+      }   
+      response.end(file);
+    });
+  }
 
-  if (request.url === "/node") {
+  else if (request.url === "/node") {
     response.write(messageNode); 
+    response.end();
   }
   else if (request.url === "/girls") {
     response.write(messageGirls);
-    
+    response.end();
   }
   else {
     response.write(message);
+    response.end();
   }
-   response.end();
+
 }
+
+
 
 var server = http.createServer(handler);
 
