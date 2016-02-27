@@ -1,11 +1,31 @@
 var http = require('http');
-
 var message = "yaehhhhh!!";
-function handler(request, response){
-  response.writeHead(200,{"Content-Type": "text/html"});
-  response.write(message);
-  response.end();
+var messageNode = "this is the node page";
+var messageGirls = "this is the girls page";
 
+function handler(request, response){
+
+  var method = request.method;
+    console.log(method);
+
+  var endpoint = request.url;
+    console.log(endpoint);
+
+  if (request.url === "/node") {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(messageNode);
+    response.end();
+  }
+  else if (request.url === "/girls") {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(messageGirls);
+    response.end();
+  }
+  else {
+    response.writeHead(200,{"Content-Type": "text/html"});
+    response.write(message);
+    response.end();
+  }
 }
 
 var server = http.createServer(handler);
