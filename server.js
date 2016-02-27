@@ -11,21 +11,20 @@ function handler(request, response){
   var endpoint = request.url;
     console.log(endpoint);
 
+  response.writeHead(200, {"Content-Type": "text/html"});
+ 
+
   if (request.url === "/node") {
-    response.writeHead(200, {"Content-Type": "text/html"});
-    response.write(messageNode);
-    response.end();
+    response.write(messageNode); 
   }
   else if (request.url === "/girls") {
-    response.writeHead(200, {"Content-Type": "text/html"});
     response.write(messageGirls);
-    response.end();
+    
   }
   else {
-    response.writeHead(200,{"Content-Type": "text/html"});
     response.write(message);
-    response.end();
   }
+   response.end();
 }
 
 var server = http.createServer(handler);
