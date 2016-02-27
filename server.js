@@ -12,8 +12,8 @@ function handler(request, response){
 
   var endpoint = request.url;
     console.log(endpoint);
-
-  if (request.url === "/") {
+  
+  if (endpoint === "/") {
     response.writeHead(200, {"Content-Type": "text/html"});
     fs.readFile(__dirname + '/public/index.html', function(error, file) {
       if (error) {
@@ -24,17 +24,23 @@ function handler(request, response){
     });
   }
 
-  else if (request.url === "/node") {
+  else if (endpoint === "/node") {
     response.write(messageNode); 
     response.end();
   }
-  else if (request.url === "/girls") {
+  else if (endpoint === "/girls") {
     response.write(messageGirls);
     response.end();
   }
-  else {
-    response.write(message);
-    response.end();
+  else  {
+    fs.readFile(__dirname + "/public" + endpoint, function(error, file){
+      if (error) {
+        console.log(error);
+        return;
+      } 
+      response.end(file);
+    });
+   
   }
 
 }
