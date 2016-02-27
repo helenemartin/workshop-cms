@@ -1,5 +1,6 @@
 var http = require('http');
 var fs = require('fs');
+var querystring = require('querystring');
 var message = "yaehhhhh!!";
 var messageNode = "this is the node page";
 var messageGirls = "this is the girls page";
@@ -12,10 +13,13 @@ function handler(request, response){
 
   var endpoint = request.url;
     console.log(endpoint);
+ 
   
+
+
   if (endpoint === "/") {
     response.writeHead(200, {"Content-Type": "text/html"});
-    fs.readFile(__dirname + '/public/index.html', function(error, file) {
+    fs.readFile(__dirname + '/assets/index.html', function(error, file) {
       if (error) {
         console.log(error);
         return;
@@ -24,16 +28,25 @@ function handler(request, response){
     });
   }
 
-  else if (endpoint === "/node") {
-    response.write(messageNode); 
+  else if (endpoint === "/create-post") {
+    response.writeHead(200, {"Content-Type": "text/html"});
+    var allTheData = '';
+    request.on('data', function (chunkOfData) {
+    allTheData += chunkOfData;
+  });
+
+  request.on('end', function(){ 
+    var convertedData = querystring.parse(allTheData);
+    console.log(convertedData);
     response.end();
+  });
   }
   else if (endpoint === "/girls") {
     response.write(messageGirls);
     response.end();
   }
   else  {
-    fs.readFile(__dirname + "/public" + endpoint, function(error, file){
+    fs.readFile(__dirname + "/assets" + endpoint, function(error, file){
       if (error) {
         console.log(error);
         return;
@@ -54,3 +67,5 @@ server.listen(3000, function() {
   
 
 });
+
+
